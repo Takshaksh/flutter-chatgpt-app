@@ -5,16 +5,17 @@ class Model {
     required this.created,
     required this.ownedBy,
   });
-  late final String id;
-  late final String object;
-  late final int created;
-  late final String ownedBy;
+  final String id;
+  final String object;
+  final int created;
+  final String ownedBy;
   
-  Model.fromJson(Map<String, dynamic> json){
-    id = json['id'];
-    object = json['object'];
-    created = json['created'];
-    ownedBy = json['owned_by'];
+  factory Model.fromJson(Map<String, dynamic> json){
+    return Model(
+      id: json['id'], 
+      object: json['object'], 
+      created: json['created'], 
+      ownedBy: json['owned_by']);
   }
 
   Map<String, dynamic> toJson() {

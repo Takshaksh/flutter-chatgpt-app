@@ -7,26 +7,29 @@ class ModelResponse {
     required this.object,
     required this.data,
   });
-  late final String object;
-  late final List<Model> data;
+  final String object;
+  final List<Model> data;
   
-  ModelResponse.fromJson(Map<String, dynamic> json){
+  factory ModelResponse.fromJson(Map<String, dynamic> json){
     log("MR start");
-    object = json['object'];
-    log("MR after obj");
-    if (json['data'] != null) {
-      log("MR in if null");
-      data = <Model>[];
-      json['data'].forEach((v){
-        data.add(Model.fromJson(v));
-      });
-    }
+    var list = <Model>[];
+
+    json['data'].forEach((v){
+      list.add(Model.fromJson(v));
+    });
+    log("MR b4 return");
+
+    return ModelResponse(
+      object: json['object'], 
+      data: list
+    );
+
+  }
+    // if (json['data'] != null) {
+    //   data = <Model>[];
+    //   json['data'].forEach((v){
+    //     data.add(Model.fromJson(v));
+    //   });
+    // }
   }
 
-  Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['object'] = object;
-    _data['data'] = data.map((e)=>e.toJson()).toList();
-    return _data;
-  }
-}

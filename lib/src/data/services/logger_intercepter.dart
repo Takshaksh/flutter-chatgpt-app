@@ -28,7 +28,7 @@ class LoggerInterceptor implements Interceptor {
     log('🐦 Received network response →');
     log('${response.statusCode != 200 ? '❌ ${response.statusCode} ❌' : '✅ 200 →'} $endpoint');
     log('Query params: ${response.requestOptions.queryParameters}');
-    log('Response on response: ${response.toString()}');
+    log('Response on response: ${response.toString().substring(0, 100)}');
     log('---------------------------------');
 
     return handler.next(response);

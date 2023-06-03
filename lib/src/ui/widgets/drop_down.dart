@@ -22,9 +22,11 @@ class ModelDropDownWidget extends ConsumerWidget{
           dropdownColor: Rang.backgroundColor,
           iconEnabledColor: Rang.textColor,
           style: const TextStyle(color: Rang.textColor),
+          hint: const Text("Select a model", style: TextStyle(color: Rang.hintTextColor),),
           items: getDropdownMenuItems(dataModelList: models.data),
+          // value: ref.watch(selectedModelProvider).toString(),
           onChanged: (value) {
-            // Handle onChanged event
+            ref.read(selectedModelProvider.notifier).state = value!;
           },
         );
       }, 
