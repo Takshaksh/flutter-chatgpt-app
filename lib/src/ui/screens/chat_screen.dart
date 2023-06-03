@@ -1,4 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_chatgpt/src/data/repository/chatgpt_repository.dart';
+import 'package:flutter_chatgpt/src/data/services/dio_api_service.dart';
 import 'package:flutter_chatgpt/src/ui/widgets/chat_widget.dart';
 import 'package:flutter_chatgpt/src/ui/widgets/drop_down.dart';
 import 'package:flutter_chatgpt/src/utils/assets_manager.dart';
@@ -21,10 +25,13 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final bool _isTyping = true;
   late TextEditingController messageTextEditingController;
+  late ChatGptRepository chatGptRepository;
 
   @override
   void initState() {
     messageTextEditingController = TextEditingController();
+    chatGptRepository = ChatGptRepository(ApiClient());
+
     super.initState();
   }
 
@@ -145,8 +152,14 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                     IconButton(
-                        onPressed: () {
+                        onPressed: () async {
                           Fluttertoast.showToast(msg: "Send button tapped");
+
+                          try {
+                            await chatGptRepository.getModels();
+                          } catch (error) {
+                            log('Error on send button: $error');
+                          }
                         },
                         icon: const Icon(
                           Icons.send_rounded,
