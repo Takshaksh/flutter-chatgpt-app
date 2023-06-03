@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_chatgpt/env/env.dart';
 import 'package:flutter_chatgpt/src/data/services/api_endpoints.dart';
 import 'package:flutter_chatgpt/src/data/services/logger_intercepter.dart';
 
@@ -16,7 +17,7 @@ class ApiClient{
 
     // Adding headers
     _dio.options.headers['Content-Type'] = 'application/json';
-    _dio.options.headers['Authorization'] = 'Bearer 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';
+    _dio.options.headers['Authorization'] = 'Bearer ${Env.apiKey}';
   }
 
   // Token header setter

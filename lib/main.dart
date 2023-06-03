@@ -3,7 +3,7 @@ import 'package:flutter_chatgpt/src/ui/screens/chat_screen.dart';
 import 'package:flutter_chatgpt/src/utils/colors.dart';
 import 'package:flutter_chatgpt/src/utils/dimens.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 

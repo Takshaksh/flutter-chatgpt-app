@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:json_annotation/json_annotation.dart';
 
+part 'model_model.g.dart';
+
 @JsonSerializable()
 class Model {
   Model({

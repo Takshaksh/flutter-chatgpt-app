@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter_chatgpt/src/data/models/choices_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+part 'completions_model.g.dart';
+
 @JsonSerializable()
 class Completions {
   Completions({
