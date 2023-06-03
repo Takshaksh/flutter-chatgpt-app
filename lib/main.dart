@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt/src/ui/screens/chat_screen.dart';
 import 'package:flutter_chatgpt/src/utils/colors.dart';
 import 'package:flutter_chatgpt/src/utils/dimens.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() async {
-  runApp(const MyApp());
+void main() {
+  runApp(const ProviderScope(child: MyChatGptApp(),));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyChatGptApp extends ConsumerWidget {
+  const MyChatGptApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       title: 'Flutter ChatGPT',
       debugShowCheckedModeBanner: false,

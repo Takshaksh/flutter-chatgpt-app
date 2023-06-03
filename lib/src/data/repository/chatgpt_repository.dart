@@ -1,6 +1,6 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_chatgpt/src/data/response/model_response.dart';
@@ -9,7 +9,6 @@ import 'package:flutter_chatgpt/src/data/services/dio_api_service.dart';
 
 class ChatGptRepository{
   final ApiClient _apiClient;
-  final String apiKey = '';
   final String baseUrl = Endpoints.baseUrl;
 
   ChatGptRepository(this._apiClient);
@@ -19,14 +18,18 @@ class ChatGptRepository{
     try {
       final response = await _apiClient.dio.get(Endpoints.models);
 
-      Map jsonError = jsonDecode(response.data);
-      if (jsonError['error'] != null) {
-        throw HttpException(jsonError['error']['message']);
-      }
+      // Map jsonError = jsonDecode(response.data);
+      // if (jsonError['error'] != null) {
+      //   throw HttpException(jsonError['error']['message']);
+      // }
+      
+      log("Model response: ${jsonDecode(response.data)}");
 
-      return ModelResponse.fromJson(response.data);
+      final data = ModelResponse.fromJson(jsonDecode(response.data));
+      return data;
     } catch (exception) {
-      throw Exception('Failed to fetch models: $exception');
+      log("Model Response Exception: $exception");
+      throw Exception(exception);
     }
   }
 

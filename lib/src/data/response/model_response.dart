@@ -1,4 +1,5 @@
-import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter_chatgpt/src/data/models/model_model.dart';
 
 class ModelResponse {
@@ -6,25 +7,26 @@ class ModelResponse {
     required this.object,
     required this.data,
   });
-
-  final String object;
-  final List<Model> data;
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'object': object,
-      'data': data.map((x) => x.toMap()).toList(),
-    };
+  late final String object;
+  late final List<Model> data;
+  
+  ModelResponse.fromJson(Map<String, dynamic> json){
+    log("MR start");
+    object = json['object'];
+    log("MR after obj");
+    if (json['data'] != null) {
+      log("MR in if null");
+      data = <Model>[];
+      json['data'].forEach((v){
+        data.add(Model.fromJson(v));
+      });
+    }
   }
 
-  factory ModelResponse.fromMap(Map<String, dynamic> map) {
-    return ModelResponse(
-      object: map['object'] as String,
-      data: List<Model>.from((map['data'] as List<int>).map<Model>((x) => Model.fromMap(x as Map<String,dynamic>),),),
-    );
+  Map<String, dynamic> toJson() {
+    final _data = <String, dynamic>{};
+    _data['object'] = object;
+    _data['data'] = data.map((e)=>e.toJson()).toList();
+    return _data;
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory ModelResponse.fromJson(String source) => ModelResponse.fromMap(json.decode(source) as Map<String, dynamic>);
 }

@@ -1,9 +1,3 @@
-import 'dart:convert';
-import 'package:json_annotation/json_annotation.dart';
-
-part 'model_model.g.dart';
-
-@JsonSerializable()
 class Model {
   Model({
     required this.id,
@@ -11,31 +5,24 @@ class Model {
     required this.created,
     required this.ownedBy,
   });
-
-  final String id;
-  final String object; 
-  final int created;
-  final String ownedBy;
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'object': object,
-      'created': created,
-      'ownedBy': ownedBy,
-    };
+  late final String id;
+  late final String object;
+  late final int created;
+  late final String ownedBy;
+  
+  Model.fromJson(Map<String, dynamic> json){
+    id = json['id'];
+    object = json['object'];
+    created = json['created'];
+    ownedBy = json['owned_by'];
   }
 
-  factory Model.fromMap(Map<String, dynamic> map) {
-    return Model(
-      id: map['id'] as String,
-      object: map['object'] as String,
-      created: map['created'] as int,
-      ownedBy: map['ownedBy'] as String,
-    );
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['id'] = id;
+    data['object'] = object;
+    data['created'] = created;
+    data['owned_by'] = ownedBy;
+    return data;
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory Model.fromJson(String source) => Model.fromMap(json.decode(source) as Map<String, dynamic>);
 }

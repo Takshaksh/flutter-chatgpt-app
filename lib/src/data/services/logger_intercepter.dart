@@ -16,6 +16,7 @@ class LoggerInterceptor implements Interceptor {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     log('🌍 Sending network request: ${options.baseUrl}${options.path}');
     log('🌍 Request parameters: ${options.data.toString()}');
+    log('---------------------------------');
 
     return handler.next(options);
   }
@@ -24,11 +25,11 @@ class LoggerInterceptor implements Interceptor {
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     String endpoint = "${response.requestOptions.baseUrl}${response.requestOptions.path}";
 
-    log('🐦 Received network response');
-    log('${response.statusCode != 200 ? '❌ ${response.statusCode} ❌' : '✅ 200 ✅'} $endpoint');
+    log('🐦 Received network response →');
+    log('${response.statusCode != 200 ? '❌ ${response.statusCode} ❌' : '✅ 200 →'} $endpoint');
     log('Query params: ${response.requestOptions.queryParameters}');
     log('Response on response: ${response.toString()}');
-    log('-------------------------');
+    log('---------------------------------');
 
     return handler.next(response);
   }

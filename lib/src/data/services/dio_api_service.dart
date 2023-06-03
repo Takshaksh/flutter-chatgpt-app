@@ -2,9 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter_chatgpt/env/env.dart';
 import 'package:flutter_chatgpt/src/data/services/api_endpoints.dart';
 import 'package:flutter_chatgpt/src/data/services/logger_intercepter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../providers/common_providers.dart';
 
 class ApiClient{
   final Dio _dio;
+  final providerContainer = ProviderContainer();
 
   // On instantiation, creating the Dio client
   ApiClient() : _dio = Dio() {
@@ -17,7 +21,7 @@ class ApiClient{
 
     // Adding headers
     _dio.options.headers['Content-Type'] = 'application/json';
-    _dio.options.headers['Authorization'] = 'Bearer ${Env.apiKey}';
+    _dio.options.headers['Authorization'] = 'Bearer ${providerContainer.read(tokenProvider)}';
   }
 
   // Token header setter

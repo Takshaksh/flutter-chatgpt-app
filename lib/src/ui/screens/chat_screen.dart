@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_chatgpt/src/data/providers/common_providers.dart';
 import 'package:flutter_chatgpt/src/data/repository/chatgpt_repository.dart';
 import 'package:flutter_chatgpt/src/data/services/dio_api_service.dart';
 import 'package:flutter_chatgpt/src/ui/widgets/chat_widget.dart';
@@ -8,30 +9,28 @@ import 'package:flutter_chatgpt/src/ui/widgets/drop_down.dart';
 import 'package:flutter_chatgpt/src/utils/assets_manager.dart';
 import 'package:flutter_chatgpt/src/utils/colors.dart';
 import 'package:flutter_chatgpt/src/utils/dimens.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../utils/constants.dart';
 
-class ChatScreen extends StatefulWidget {
+class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() {
-    return _ChatScreenState();
+  ChatScreenState createState() {
+    return ChatScreenState();
   }
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class ChatScreenState extends ConsumerState<ChatScreen> {
   final bool _isTyping = true;
   late TextEditingController messageTextEditingController;
-  late ChatGptRepository chatGptRepository;
 
   @override
   void initState() {
     messageTextEditingController = TextEditingController();
-    chatGptRepository = ChatGptRepository(ApiClient());
-
     super.initState();
   }
 
@@ -155,11 +154,11 @@ class _ChatScreenState extends State<ChatScreen> {
                         onPressed: () async {
                           Fluttertoast.showToast(msg: "Send button tapped");
 
-                          try {
-                            await chatGptRepository.getModels();
-                          } catch (error) {
-                            log('Error on send button: $error');
-                          }
+                          // try {
+                          //   ref.read(modelsProvider);
+                          // } catch (error) {
+                          //   log('Error on send button: $error');
+                          // }
                         },
                         icon: const Icon(
                           Icons.send_rounded,
