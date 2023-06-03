@@ -13,8 +13,11 @@ class Rang{
 
   // Primary colors
   static const primaryColor = Color(_primaryColor);
-  static const primaryTextColor = Color(_textColor);
 
   static const backgroundColor = Color(_darkColor);
   static const cardColor = Color(_darkSecondaryColor);
+  
+  // Text colors
+  static const textColor = Color(_textColor);
+  static const hintTextColor = Color.fromARGB(150, 236, 236, 241);
 }

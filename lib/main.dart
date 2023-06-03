@@ -15,20 +15,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter ChatGPT',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          scaffoldBackgroundColor: Rang.backgroundColor,
-          colorScheme: ColorScheme.fromSeed(seedColor: Rang.primaryColor),
-          textTheme: const TextTheme(
-            bodyMedium: TextStyle(color: Rang.primaryTextColor),
-          ),
-          useMaterial3: true,
-          appBarTheme: const AppBarTheme(
-              color: Rang.primaryColor,
-              centerTitle: true,
-              titleTextStyle: TextStyle(
-                color: Rang.primaryTextColor,
-                fontSize: Dimens.fontSizeLarge
-              ))),
+        scaffoldBackgroundColor: Rang.backgroundColor,
+        colorScheme: ColorScheme.fromSeed(seedColor: Rang.primaryColor),
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(color: Rang.textColor),
+        ),
+        useMaterial3: true,
+        appBarTheme: const AppBarTheme(
+          color: Rang.primaryColor,
+          titleTextStyle: TextStyle(
+            color: Rang.textColor,
+            fontSize: Dimens.fontSizeLarge
+          )
+        )
+      ),
       home: const ChatScreen(),
     );
   }
