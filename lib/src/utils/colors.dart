@@ -13,9 +13,15 @@ class Rang{
 
   // Primary colors
   static const primaryColor = Color(_primaryColor);
+  static const accentColor = Color(_accentColor);
 
+  // Universal colors
+  static const whiteColor = Color(_whiteColor);
+  static const blackColor = Color(_darkColor);
+
+  // Background colors
   static const backgroundColor = Color(_darkColor);
-  static const cardColor = Color(_darkSecondaryColor);
+  static const cardBackgroundColor = Color(_darkSecondaryColor);
   
   // Text colors
   static const textColor = Color(_textColor);

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chatgpt/src/ui/widgets/chat_widget.dart';
+import 'package:flutter_chatgpt/src/ui/widgets/drop_down.dart';
 import 'package:flutter_chatgpt/src/utils/assets_manager.dart';
 import 'package:flutter_chatgpt/src/utils/colors.dart';
 import 'package:flutter_chatgpt/src/utils/dimens.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import '../../utils/constants.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -38,7 +42,57 @@ class _ChatScreenState extends State<ChatScreen> {
         title: const Text("Flutter ChatGPT"),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              await showModalBottomSheet(
+                context: context,
+                backgroundColor: Rang.backgroundColor,
+                shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(8))),
+                builder: (context) {
+                  return Container(
+                    width: double.infinity,
+                    height: 200,
+                    padding: Dimens.paddingMedium,
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          decoration: const BoxDecoration(
+                            color: Rang.cardBackgroundColor,
+                            borderRadius: Dimens.radiusMedium,
+                          ),
+                          child: const SizedBox(width: 64, height: 1),
+                        ),
+                        const SizedBox(height: 16,),
+                        const Text(
+                          "👇 Choose a model 👇",
+                          style: TextStyle(color: Rang.textColor, fontWeight: FontWeight.w600, fontSize: 18),
+                        ),
+
+                        const Flexible(
+                          child: ModelDropDownWidget()
+                        ),
+
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(Rang.accentColor),
+                              foregroundColor: const MaterialStatePropertyAll(Rang.textColor),
+                              padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 4, horizontal: 6))
+                            ),
+                            child: const Text("Okay"),
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                }
+              );
+            },
             icon: const Icon(
               Icons.more_vert_rounded,
               color: Rang.textColor,
@@ -52,9 +106,12 @@ class _ChatScreenState extends State<ChatScreen> {
             children: [
               Flexible(
                   child: ListView.builder(
-                itemCount: 6,
+                itemCount: 10,
                 itemBuilder: (context, index) {
-                  return const Text("This is a text");
+                  return ChatWidget(
+                    msg: chatMessages[index]['msg'].toString(),
+                    chatIndex: int.parse(chatMessages[index]['chatIndex'].toString()),
+                  );
                 },
               )),
               if (_isTyping) ...[
@@ -67,7 +124,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 height: 16,
               ),
               Container(
-                color: Rang.cardColor,
+                color: Rang.cardBackgroundColor,
                 child: Row(
                   children: [
                     Expanded(
