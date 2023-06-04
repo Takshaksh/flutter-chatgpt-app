@@ -1,9 +1,5 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_chatgpt/src/data/providers/common_providers.dart';
-import 'package:flutter_chatgpt/src/data/repository/chatgpt_repository.dart';
-import 'package:flutter_chatgpt/src/data/services/dio_api_service.dart';
 import 'package:flutter_chatgpt/src/ui/widgets/chat_widget.dart';
 import 'package:flutter_chatgpt/src/ui/widgets/drop_down.dart';
 import 'package:flutter_chatgpt/src/utils/assets_manager.dart';
@@ -57,7 +53,7 @@ class ChatScreenState extends ConsumerState<ChatScreen> {
                 builder: (context) {
                   return Container(
                     width: double.infinity,
-                    height: 200,
+                    height: 210,
                     padding: Dimens.paddingMedium,
                     child: Column(
                       children: [
@@ -74,6 +70,7 @@ class ChatScreenState extends ConsumerState<ChatScreen> {
                           "👇 Choose a model 👇",
                           style: TextStyle(color: Rang.textColor, fontWeight: FontWeight.w600, fontSize: 18),
                         ),
+                        const SizedBox(height: 12,),
 
                         const Flexible(
                           child: ModelDropDownWidget()
@@ -86,7 +83,7 @@ class ChatScreenState extends ConsumerState<ChatScreen> {
                               Navigator.pop(context);
                             },
                             style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(Rang.accentColor),
+                              backgroundColor: MaterialStateProperty.all(Rang.primaryColor),
                               foregroundColor: const MaterialStatePropertyAll(Rang.textColor),
                               padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 4, horizontal: 6))
                             ),
@@ -151,19 +148,14 @@ class ChatScreenState extends ConsumerState<ChatScreen> {
                       ),
                     ),
                     IconButton(
-                        onPressed: () async {
-                          Fluttertoast.showToast(msg: "Send button tapped");
-
-                          // try {
-                          //   ref.read(modelsProvider);
-                          // } catch (error) {
-                          //   log('Error on send button: $error');
-                          // }
-                        },
-                        icon: const Icon(
-                          Icons.send_rounded,
-                          color: Rang.textColor,
-                        ))
+                      onPressed: () async {
+                        Fluttertoast.showToast(msg: "Send button tapped");
+                      },
+                      icon: const Icon(
+                        Icons.send_rounded,
+                        color: Rang.textColor,
+                      )
+                   )
                   ],
                 ),
               )

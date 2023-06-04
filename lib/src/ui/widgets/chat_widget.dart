@@ -20,7 +20,7 @@ class ChatWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset(
-                  chatIndex == 0 ? AssetsManager.userImage : AssetsManager.botImage,
+                  chatIndex == 0 ? AssetsManager.avatarAstronaut : AssetsManager.botImage,
                   width: 32,
                   height: 32,
                 ),

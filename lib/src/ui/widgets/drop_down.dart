@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt/src/data/providers/common_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../data/models/model_model.dart';
 import '../../data/response/model_response.dart';
@@ -14,20 +16,34 @@ class ModelDropDownWidget extends ConsumerWidget{
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final modelsAsyncValue = ref.watch(modelsProvider);
+    final selectedModel = ref.watch(selectedModelProvider);
 
     return modelsAsyncValue.when(
-      loading: () => const CircularProgressIndicator(),
+      loading: () => const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: SpinKitThreeBounce(color: Rang.whiteColor, size: 24,),
+      ),
       data: (models){
-        return DropdownButton(
-          dropdownColor: Rang.backgroundColor,
-          iconEnabledColor: Rang.textColor,
-          style: const TextStyle(color: Rang.textColor),
-          hint: const Text("Select a model", style: TextStyle(color: Rang.hintTextColor),),
-          items: getDropdownMenuItems(dataModelList: models.data),
-          // value: ref.watch(selectedModelProvider).toString(),
-          onChanged: (value) {
-            ref.read(selectedModelProvider.notifier).state = value!;
-          },
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Rang.cardBackgroundColor
+          ), 
+          child: DropdownButton(
+            dropdownColor: Rang.backgroundColor,
+            iconEnabledColor: Rang.textColor,
+            underline: Container(),
+            style: const TextStyle(color: Rang.textColor),
+            padding: const EdgeInsets.all(8),
+            borderRadius: const BorderRadius.all(Radius.circular(16)),
+            hint: const Text("Select a model", style: TextStyle(color: Rang.textColor),),
+            items: getDropdownMenuItems(dataModelList: models.data),
+            value: selectedModel != '' ? selectedModel : null,
+            onChanged: (value) {
+              ref.read(selectedModelProvider.notifier).state = value!;
+              Fluttertoast.showToast(msg: "Selected → $value");
+            },
+          ),
         );
       }, 
       error: (error, stackTrace) {
@@ -37,7 +53,6 @@ class ModelDropDownWidget extends ConsumerWidget{
       }, 
     );
   }
-
 
   List<DropdownMenuItem<String>> getDropdownMenuItems({required List<Model> dataModelList }){
     var dataModelItems = List<DropdownMenuItem<String>>.generate(
@@ -53,33 +68,3 @@ class ModelDropDownWidget extends ConsumerWidget{
     return dataModelItems;
   }
 }
-
-
-
-
-// class ModelDropDownWidget extends StatefulWidget{
-//   const ModelDropDownWidget({super.key});
-  
-//   @override
-//   State<StatefulWidget> createState() => _ModelDropDownWidgetState();
-// }
-
-// class _ModelDropDownWidgetState extends State<ModelDropDownWidget>{
-//   String currentModel = "ChatGPT 4";
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return DropdownButton(
-//       dropdownColor: Rang.backgroundColor,
-//       iconEnabledColor: Rang.textColor,
-//       style: const TextStyle(color: Rang.textColor),
-//       items: getDataModelItems,
-//       value: currentModel,
-//       onChanged: (value) {
-//         setState(() {
-//           currentModel = value.toString();
-//         });
-//       },
-//     );
-//   }
-// }

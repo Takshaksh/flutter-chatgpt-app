@@ -7,7 +7,7 @@ import 'package:flutter_chatgpt/src/data/services/dio_api_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// API related providers 
+/* API related providers */
 // Client providers
 final apiClientProvider = Provider.autoDispose<ApiClient>((ref) => ApiClient());
 
@@ -24,18 +24,16 @@ final chatGptRepoProvider = Provider.autoDispose<ChatGptRepository>((ref) {
   // We have to extract the pref value in order to use the sharedpreferences functions.
   // Eg. final sharedPreferences = ref.watch(sharedPreferencesProvider).value;
   // Eg. sharedPreferences?.getString(Constants.prefToken) ?? 'null';
-
   return ChatGptRepository(ref.watch(apiClientProvider));
 });
 
 // ModelProvider
 final modelsProvider = FutureProvider.autoDispose<ModelResponse>((ref) {
   final repository = ref.watch(chatGptRepoProvider);
-  log('modelsProvider called');
   return repository.getModels();
 });
 
-// Other common providers
+/* Other common providers */
 // Loading provider
 final isLoadingProvider = StateProvider.autoDispose<bool>((ref) => false);
 

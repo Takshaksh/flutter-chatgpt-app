@@ -23,12 +23,8 @@ class ChatGptRepository{
       //   throw HttpException(jsonError['error']['message']);
       // }
       
-      // log("Model response: ${jsonDecode(response.data)}");
-
       final data = ModelResponse.fromJson(response.data);
-      log('Object response ${data.object}');
-      log('Object response model ${data.data.length}');
-      log('Object response model ${data.data.first.id}');
+
       return data;
     } catch (exception) {
       log("Model Response Exception: $exception");
