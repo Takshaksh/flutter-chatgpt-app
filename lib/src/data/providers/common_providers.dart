@@ -4,6 +4,7 @@ import 'package:flutter_chatgpt/env/env.dart';
 import 'package:flutter_chatgpt/src/data/repository/chatgpt_repository.dart';
 import 'package:flutter_chatgpt/src/data/response/model_response.dart';
 import 'package:flutter_chatgpt/src/data/services/dio_api_service.dart';
+import 'package:flutter_chatgpt/src/utils/constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -40,4 +41,9 @@ final isLoadingProvider = StateProvider.autoDispose<bool>((ref) => false);
 // Sharedpreference provider
 final sharedPrefProvider = FutureProvider.autoDispose<SharedPreferences>((ref) async {
   return await SharedPreferences.getInstance();
+});
+
+final prefModelListProvider = FutureProvider.autoDispose<String>((ref) async {
+  final sharedPreferences = ref.watch(sharedPrefProvider).value;
+  return sharedPreferences?.getString(Constants.prefModels) ?? 'null';
 });

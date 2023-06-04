@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_chatgpt/src/data/providers/common_providers.dart';
 import 'package:flutter_chatgpt/src/ui/widgets/chat_widget.dart';
 import 'package:flutter_chatgpt/src/ui/widgets/drop_down.dart';
 import 'package:flutter_chatgpt/src/utils/assets_manager.dart';
@@ -21,7 +22,6 @@ class ChatScreen extends ConsumerStatefulWidget {
 }
 
 class ChatScreenState extends ConsumerState<ChatScreen> {
-  final bool _isTyping = true;
   late TextEditingController messageTextEditingController;
 
   @override
@@ -32,6 +32,8 @@ class ChatScreenState extends ConsumerState<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isTyping = ref.watch(isLoadingProvider);
+
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
@@ -117,7 +119,7 @@ class ChatScreenState extends ConsumerState<ChatScreen> {
                   );
                 },
               )),
-              if (_isTyping) ...[
+              if (isTyping) ...[
                 const SpinKitThreeBounce(
                   color: Rang.primaryColor,
                   size: 20,
@@ -141,15 +143,21 @@ class ChatScreenState extends ConsumerState<ChatScreen> {
                             hintStyle: TextStyle(color: Rang.hintTextColor),
                             border: InputBorder.none,
                           ),
-                          onSubmitted: (value) {
-                            // TODO: Enter submit login here
-                          },
                         ),
                       ),
                     ),
                     IconButton(
                       onPressed: () async {
-                        Fluttertoast.showToast(msg: "Send button tapped");
+                        String message = messageTextEditingController.text;
+
+                        if(message.isNotEmpty){
+                          Fluttertoast.showToast(msg: message);
+                          ref.read(isLoadingProvider.notifier).state = true;
+                          messageTextEditingController.clear();
+                        }else{
+                          Fluttertoast.showToast(msg: "Type something first.");
+                          ref.read(isLoadingProvider.notifier).state = false;
+                        }
                       },
                       icon: const Icon(
                         Icons.send_rounded,

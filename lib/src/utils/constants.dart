@@ -68,3 +68,9 @@ final chatMessages = [
     "chatIndex": 1
   }
 ];
+
+class Constants{
+  // Sharedpreferences constants
+  static const prefToken = 'token';
+  static const prefModels = 'models';
+}

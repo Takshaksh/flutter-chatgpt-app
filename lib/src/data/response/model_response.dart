@@ -1,4 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
 import 'dart:developer';
+
 import 'package:flutter_chatgpt/src/data/models/model_model.dart';
 
 class ModelResponse {
@@ -20,5 +23,14 @@ class ModelResponse {
       data: list
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'object': object,
+      'data': data.map((x) => x.toJson()).toList(),
+    };
+  }
+
+  String toJson() => json.encode(toMap());
 }
 
