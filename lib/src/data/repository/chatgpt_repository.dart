@@ -39,7 +39,8 @@ class ChatGptRepository{
       final response = await _apiClient.dio.post(Endpoints.query, data: {
         'model': model,
         'prompt': prompt,
-        'max_tokens': Endpoints.maxTokens
+        'max_tokens': Endpoints.maxTokens,
+        "temperature": 0
       });
 
       final data = Completions.fromJson(response.data);

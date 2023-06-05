@@ -9,6 +9,7 @@ class AssetsManager{
   static String openaiLogo = "$imagePath/openai_logo.jpg";
   static String avatarUser = "$imagePath/ic_user.png";
   static String avatarAstronaut = "$imagePath/ic_avatar_astronaut.png";
+  static String askAnything = "$imagePath/ic_ask_anything.png";
 
   // Fonts
 

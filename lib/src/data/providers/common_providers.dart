@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter_chatgpt/env/env.dart';
 import 'package:flutter_chatgpt/src/data/models/completions_model.dart';
+import 'package:flutter_chatgpt/src/data/models/message_model.dart';
 import 'package:flutter_chatgpt/src/data/models/quary_parameters.dart';
+import 'package:flutter_chatgpt/src/data/providers/message_notifier.dart';
 import 'package:flutter_chatgpt/src/data/repository/chatgpt_repository.dart';
 import 'package:flutter_chatgpt/src/data/response/model_response.dart';
 import 'package:flutter_chatgpt/src/data/services/dio_api_service.dart';
@@ -30,11 +32,13 @@ final chatGptRepoProvider = Provider.autoDispose<ChatGptRepository>((ref) {
   return ChatGptRepository(ref.watch(apiClientProvider));
 });
 
+// Fetches models list from OpenAI API
 final modelsProvider = FutureProvider.autoDispose<ModelResponse>((ref) {
   final repository = ref.watch(chatGptRepoProvider);
   return repository.getModels();
 });
 
+// Sends a prompt to the OpenAI API and gets the response requires {model name and prompt message}
 final sendQueryProvider = FutureProvider.autoDispose.family<Completions, QueryParameters>((ref, arg) {
   final repository = ref.watch(chatGptRepoProvider);
   return repository.sendQuery(model: arg.model, prompt: arg.prompt);
@@ -50,7 +54,11 @@ final sharedPrefProvider = FutureProvider.autoDispose<SharedPreferences>((ref) a
   return await SharedPreferences.getInstance();
 });
 
+// Locally stored models list provider
 final prefModelListProvider = FutureProvider.autoDispose<String>((ref) async {
   final sharedPreferences = ref.watch(sharedPrefProvider).value;
   return sharedPreferences?.getString(Constants.prefModels) ?? 'null';
 });
+
+// Chat list statenotifier provider
+final messagesProvider = StateNotifierProvider<MessagesNotifier, List<Message>>((ref) => MessagesNotifier());
