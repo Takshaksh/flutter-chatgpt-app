@@ -1,10 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
 import 'package:flutter_chatgpt/src/data/models/choices_model.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'completions_model.g.dart';
-
-@JsonSerializable()
 class Completions {
   Completions({
     required this.id,
@@ -18,7 +16,19 @@ class Completions {
   final String object; 
   final int created;
   final String model;
-  final Choices choices;
+  final List<Choices> choices;
+
+  factory Completions.fromJson(Map<String, dynamic> json) {
+    // var list = (json['data'] as List).map((v) => Model.fromJson(v)).toList();
+    var list = (json['choices'] as List).map((e) => Choices.fromJson(e)).toList();
+    return Completions(
+      id: json['id'],
+      object: json['object'],
+      created: json['created'],
+      model: json['model'],
+      choices: list
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -26,21 +36,10 @@ class Completions {
       'object': object,
       'created': created,
       'model': model,
-      'choices': choices.toMap(),
+      'choices': choices.map((x) => x.toJson()).toList(),
     };
-  }
-
-  factory Completions.fromMap(Map<String, dynamic> map) {
-    return Completions(
-      id: map['id'] as String,
-      object: map['object'] as String,
-      created: map['created'] as int,
-      model: map['model'] as String,
-      choices: Choices.fromMap(map['choices'] as Map<String,dynamic>),
-    );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Completions.fromJson(String source) => Completions.fromMap(json.decode(source) as Map<String, dynamic>);
 }

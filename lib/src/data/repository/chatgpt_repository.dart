@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_chatgpt/src/data/models/completions_model.dart';
 import 'package:flutter_chatgpt/src/data/response/model_response.dart';
 import 'package:flutter_chatgpt/src/data/services/api_endpoints.dart';
 import 'package:flutter_chatgpt/src/data/services/dio_api_service.dart';
@@ -33,7 +34,7 @@ class ChatGptRepository{
   }
 
   // 2. Query to a model
-  Future<Response> sendQuery({required String prompt, required String model}) async {
+  Future<Completions> sendQuery({required String model, required String prompt}) async {
     try {
       final response = await _apiClient.dio.post(Endpoints.query, data: {
         'model': model,
@@ -41,8 +42,10 @@ class ChatGptRepository{
         'max_tokens': Endpoints.maxTokens
       });
 
-      return response;
+      final data = Completions.fromJson(response.data);
+      return data;
     } catch (exception) {
+      log("Completion Response Exception: $exception");
       rethrow;
     }
   }

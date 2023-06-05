@@ -1,5 +1,8 @@
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_chatgpt/src/data/models/quary_parameters.dart';
 import 'package:flutter_chatgpt/src/data/providers/common_providers.dart';
 import 'package:flutter_chatgpt/src/ui/widgets/chat_widget.dart';
 import 'package:flutter_chatgpt/src/ui/widgets/drop_down.dart';
@@ -22,17 +25,18 @@ class ChatScreen extends ConsumerStatefulWidget {
 }
 
 class ChatScreenState extends ConsumerState<ChatScreen> {
-  late TextEditingController messageTextEditingController;
+  late TextEditingController promptTextEditingController;
 
   @override
   void initState() {
-    messageTextEditingController = TextEditingController();
+    promptTextEditingController = TextEditingController();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final isTyping = ref.watch(isLoadingProvider);
+    final selectedModel = ref.watch(selectedModelProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -137,7 +141,7 @@ class ChatScreenState extends ConsumerState<ChatScreen> {
                         padding: const EdgeInsets.fromLTRB(16, 4, 0, 4),
                         child: TextField(
                           style: const TextStyle(color: Rang.textColor),
-                          controller: messageTextEditingController,
+                          controller: promptTextEditingController,
                           decoration: const InputDecoration(
                             hintText: "How may I help you?",
                             hintStyle: TextStyle(color: Rang.hintTextColor),
@@ -148,15 +152,21 @@ class ChatScreenState extends ConsumerState<ChatScreen> {
                     ),
                     IconButton(
                       onPressed: () async {
-                        String message = messageTextEditingController.text;
+                        String prompt = promptTextEditingController.text;
 
-                        if(message.isNotEmpty){
-                          Fluttertoast.showToast(msg: message);
-                          ref.read(isLoadingProvider.notifier).state = true;
-                          messageTextEditingController.clear();
+                        if(prompt.isNotEmpty && selectedModel.isNotEmpty){
+                          try {
+                            ref.read(isLoadingProvider.notifier).state = true;
+                            final result = await ref.watch(sendQueryProvider(QueryParameters(model: selectedModel, prompt: prompt)).future);
+                            promptTextEditingController.clear();
+                            log("Completion data ChatScreen: index: ${result.choices.first.index} reply: ${result.choices.first.text}");
+                            ref.read(isLoadingProvider.notifier).state = false;
+                          } catch (error) {
+                            log("Error in ChatScreen: ${error.toString()}");
+                            Fluttertoast.showToast(msg: error.toString());
+                          }
                         }else{
-                          Fluttertoast.showToast(msg: "Type something first.");
-                          ref.read(isLoadingProvider.notifier).state = false;
+                          Fluttertoast.showToast(msg: "Select model or type something.");
                         }
                       },
                       icon: const Icon(

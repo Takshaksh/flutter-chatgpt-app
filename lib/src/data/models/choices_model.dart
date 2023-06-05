@@ -1,9 +1,5 @@
 import 'dart:convert';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'choices_model.g.dart';
-
-@JsonSerializable()
 class Choices {
   Choices({
     required this.text,
@@ -11,27 +7,23 @@ class Choices {
     required this.finishReason,
   });
 
-final String text;
+  final String text;
   final int index;
   final String finishReason;
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'text': text,
-      'index': index,
-      'finish_reason': finishReason,
-    };
-  }
-
-  factory Choices.fromMap(Map<String, dynamic> map) {
+  factory Choices.fromJson(Map<String, dynamic> json){
     return Choices(
-      text: map['text'] as String,
-      index: map['index'] as int,
-      finishReason: map['finish_reason'] as String,
+      text: json['text'], 
+      index: 0, 
+      finishReason: json['finish_reason']
     );
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory Choices.fromJson(String source) => Choices.fromMap(json.decode(source) as Map<String, dynamic>);
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['text'] = text;
+    data['index'] = index;
+    data['finish_reason'] = finishReason;
+    return data;
+  }
 }

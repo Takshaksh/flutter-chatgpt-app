@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_chatgpt/env/env.dart';
 import 'package:flutter_chatgpt/src/data/services/api_endpoints.dart';
 import 'package:flutter_chatgpt/src/data/services/logger_intercepter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

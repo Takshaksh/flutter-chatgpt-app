@@ -23,48 +23,47 @@ class ModelDropDownWidget extends ConsumerWidget{
   }
 
   @override
-Widget build(BuildContext context, WidgetRef ref) {
-  final selectedModel = ref.watch(selectedModelProvider);
-  final sharedPref = ref.watch(sharedPrefProvider).value;
-  final prefModelListFuture = ref.watch(prefModelListProvider.future);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedModel = ref.watch(selectedModelProvider);
+    final sharedPref = ref.watch(sharedPrefProvider).value;
+    final prefModelListFuture = ref.watch(prefModelListProvider.future);
 
-  return FutureBuilder<String?>(
-    future: prefModelListFuture,
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        final value = snapshot.data;
-        if (value != 'null' && value != '') {
-          List<dynamic> jsonList = jsonDecode(value!);
-          List<Model> modelList = jsonList.map((json) => Model.fromJson(json)).toList();
+    return FutureBuilder<String?>(
+      future: prefModelListFuture,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final value = snapshot.data;
+          if (value != 'null' && value != '') {
+            List<dynamic> jsonList = jsonDecode(value!);
+            List<Model> modelList = jsonList.map((json) => Model.fromJson(json)).toList();
 
-          return getDropdownButton(ref, selectedModel, modelList);
+            return getDropdownButton(ref, selectedModel, modelList);
+          } else {
+            final modelsAsyncValue = ref.watch(modelsProvider);
+            return modelsAsyncValue.when(
+              loading: () => const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: SpinKitThreeBounce(color: Rang.whiteColor, size: 24,),
+              ),
+              data: (models) {
+                List<Map<String, dynamic>> jsonList = models.data.map((model) => model.toJson()).toList();
+                sharedPref?.setString(Constants.prefModels, jsonEncode(jsonList));
+                return getDropdownButton(ref, selectedModel, models.data);
+              },
+              error: (error, stackTrace) {
+                log("Error in Dropdown error: ${error.toString()}");
+                return const Text("Models not loaded, try again.");
+              },
+            );
+          }
+        } else if (snapshot.hasError) {
+          return Text("Error: ${snapshot.error}");
         } else {
-          final modelsAsyncValue = ref.watch(modelsProvider);
-          return modelsAsyncValue.when(
-            loading: () => const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: SpinKitThreeBounce(color: Rang.whiteColor, size: 24,),
-            ),
-            data: (models) {
-              List<Map<String, dynamic>> jsonList =
-                  models.data.map((model) => model.toJson()).toList();
-              sharedPref?.setString(Constants.prefModels, jsonEncode(jsonList));
-              return getDropdownButton(ref, selectedModel, models.data);
-            },
-            error: (error, stackTrace) {
-              log("Error in Dropdown error: ${error.toString()}");
-              return const Text("Models not loaded, try again.");
-            },
-          );
+          return const SizedBox(); // Placeholder widget while loading
         }
-      } else if (snapshot.hasError) {
-        return Text("Error: ${snapshot.error}");
-      } else {
-        return const SizedBox(); // Placeholder widget while loading
-      }
-    },
-  );
-}
+      },
+    );
+  }
 
   Widget getDropdownButton(WidgetRef ref, String selectedModel, List<Model> modelList){
     return Container(
@@ -84,7 +83,7 @@ Widget build(BuildContext context, WidgetRef ref) {
         value: selectedModel != '' ? selectedModel : null,
         onChanged: (value) {
           ref.read(selectedModelProvider.notifier).state = value!;
-          Fluttertoast.showToast(msg: "Selected → $value");
+          Fluttertoast.showToast(msg: "Model selected → $value");
         },
       ),
     );

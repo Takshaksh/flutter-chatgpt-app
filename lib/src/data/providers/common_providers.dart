@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter_chatgpt/env/env.dart';
+import 'package:flutter_chatgpt/src/data/models/completions_model.dart';
+import 'package:flutter_chatgpt/src/data/models/quary_parameters.dart';
 import 'package:flutter_chatgpt/src/data/repository/chatgpt_repository.dart';
 import 'package:flutter_chatgpt/src/data/response/model_response.dart';
 import 'package:flutter_chatgpt/src/data/services/dio_api_service.dart';
@@ -19,7 +21,7 @@ final tokenProvider = Provider.autoDispose<String>((ref) => Env.apiKey);
 // Setting state: ref.read(modelProvider.notifier).state = value;
 final selectedModelProvider = StateProvider<String>((ref) => "");
 
-// Repository providers
+// Repository & endpoints providers
 final chatGptRepoProvider = Provider.autoDispose<ChatGptRepository>((ref) {
   // The FutureProvider returns Sharedpreferences with AsyncValue wrapper
   // We have to extract the pref value in order to use the sharedpreferences functions.
@@ -28,11 +30,16 @@ final chatGptRepoProvider = Provider.autoDispose<ChatGptRepository>((ref) {
   return ChatGptRepository(ref.watch(apiClientProvider));
 });
 
-// ModelProvider
 final modelsProvider = FutureProvider.autoDispose<ModelResponse>((ref) {
   final repository = ref.watch(chatGptRepoProvider);
   return repository.getModels();
 });
+
+final sendQueryProvider = FutureProvider.autoDispose.family<Completions, QueryParameters>((ref, arg) {
+  final repository = ref.watch(chatGptRepoProvider);
+  return repository.sendQuery(model: arg.model, prompt: arg.prompt);
+});
+
 
 /* Other common providers */
 // Loading provider
