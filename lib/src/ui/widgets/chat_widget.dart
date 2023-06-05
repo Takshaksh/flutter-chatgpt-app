@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt/src/utils/assets_manager.dart';
 import 'package:flutter_chatgpt/src/utils/colors.dart';
@@ -17,7 +18,8 @@ class ChatWidget extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image.asset(
                   chatIndex == 0 ? AssetsManager.avatarAstronaut : AssetsManager.botImage,
@@ -27,18 +29,34 @@ class ChatWidget extends StatelessWidget {
 
                 const SizedBox(width: 8),
 
-                Expanded(child: Text(msg)),
+                Expanded(
+                  // child: Text(msg)
+                  child: Padding(
+                    padding: chatIndex == 1 ? const EdgeInsets.only(top: 6) : const EdgeInsets.only(top: 0),
+                    child: AnimatedTextKit(
+                      repeatForever: false,
+                      isRepeatingAnimation: false,
+                      totalRepeatCount: 1,
+                      animatedTexts: [
+                        TypewriterAnimatedText(msg, speed: const Duration(milliseconds: 20), cursor: '█'),
+                      ],
+                    ),
+                  ),
+                ),
 
                 chatIndex == 0 
                   ? const SizedBox.shrink() 
-                  : const Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.thumb_up_rounded, color: Rang.textColor,),
-                      SizedBox(width: 6),
-                      Icon(Icons.thumb_down_rounded, color: Rang.textColor,)
-                    ],
+                  : const Padding(
+                    padding: EdgeInsets.only(top: 6),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.thumb_up_rounded, color: Rang.textColor,),
+                        SizedBox(width: 6),
+                        Icon(Icons.thumb_down_rounded, color: Rang.textColor,)
+                      ],
+                    ),
                   )
               ],
             ),

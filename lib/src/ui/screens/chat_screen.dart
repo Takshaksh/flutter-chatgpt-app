@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_chatgpt/src/data/models/quary_parameters.dart';
 import 'package:flutter_chatgpt/src/data/providers/common_providers.dart';
 import 'package:flutter_chatgpt/src/ui/widgets/chat_widget.dart';
@@ -43,13 +44,13 @@ class ChatScreenState extends ConsumerState<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
-          padding: Dimens.paddingSmall,
+          padding: const EdgeInsets.fromLTRB(8, 10, 1, 10),
           child: ClipRRect(
             borderRadius: Dimens.radiusLarge,
-            child: Image.asset(AssetsManager.openaiLogo),
+            child: Image.asset(AssetsManager.openaiLogo,),
           ),
         ),
-        title: const Text("Flutter ChatGPT"),
+        title: const Text("Flutter ChatGPT", style: TextStyle(fontWeight: FontWeight.bold),),
         actions: [
           TextButton(
             onPressed: () async {
@@ -174,6 +175,7 @@ class ChatScreenState extends ConsumerState<ChatScreen> {
                           ref.read(messagesProvider.notifier).addMessage(prompt, 1);
 
                           try {
+                            SystemChannels.textInput.invokeMethod('TextInput.hide');
                             ref.read(isLoadingProvider.notifier).state = true;
                             final result = await ref.watch(sendQueryProvider(QueryParameters(model: selectedModel, prompt: prompt)).future);
 
@@ -184,6 +186,7 @@ class ChatScreenState extends ConsumerState<ChatScreen> {
                             ref.read(isLoadingProvider.notifier).state = false;
                           } catch (error) {
                             log("Error in ChatScreen: ${error.toString()}");
+                            ref.read(isLoadingProvider.notifier).state = false;
                             Fluttertoast.showToast(msg: error.toString());
                           }
                         }else{

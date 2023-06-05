@@ -83,7 +83,7 @@ class ModelDropDownWidget extends ConsumerWidget{
         value: selectedModel != '' ? selectedModel : null,
         onChanged: (value) {
           ref.read(selectedModelProvider.notifier).state = value!;
-          Fluttertoast.showToast(msg: "Model selected → $value");
+          // Fluttertoast.showToast(msg: "Model selected → $value");
         },
       ),
     );

@@ -5,7 +5,7 @@ class Endpoints{
   static const String baseUrl = "https://api.openai.com/v1";
   static const int connectionTimeout = 10000;
   static const int receiveTimeout = 15000;
-  static const int maxTokens = 50;
+  static const int maxTokens = 100;
 
   // OpenAI
   static const String query = "/completions";

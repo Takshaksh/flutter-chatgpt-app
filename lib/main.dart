@@ -28,7 +28,7 @@ class MyChatGptApp extends ConsumerWidget {
           color: Rang.primaryColor,
           titleTextStyle: TextStyle(
             color: Rang.textColor,
-            fontSize: Dimens.fontSizeLarge
+            fontSize: Dimens.fontSizeMedium
           )
         )
       ),
