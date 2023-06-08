@@ -28,11 +28,25 @@ class ChatScreen extends ConsumerStatefulWidget {
 
 class ChatScreenState extends ConsumerState<ChatScreen> {
   late TextEditingController promptTextEditingController;
+  late ScrollController _chatListScrollController;
+  late FocusNode focusNode;
 
   @override
   void initState() {
+    _chatListScrollController = ScrollController();
     promptTextEditingController = TextEditingController();
+    focusNode = FocusNode();
     super.initState();
+  }
+
+  @override
+  void dispose(){
+    promptTextEditingController.dispose();
+    promptTextEditingController.dispose();
+    focusNode.dispose();
+    super.dispose();
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) => scrollListToEnd());
   }
 
   @override
@@ -126,6 +140,7 @@ class ChatScreenState extends ConsumerState<ChatScreen> {
               else
                 Flexible(
                   child: ListView.builder(
+                    controller: _chatListScrollController,
                     itemCount: messages.length,
                     itemBuilder: (context, index) {
                       return ChatWidget(
@@ -183,11 +198,12 @@ class ChatScreenState extends ConsumerState<ChatScreen> {
 
                             promptTextEditingController.clear();
                             log("Completion data ChatScreen: index: ${result.choices.first.index} reply: ${result.choices.first.text}");
-                            ref.read(isLoadingProvider.notifier).state = false;
                           } catch (error) {
                             log("Error in ChatScreen: ${error.toString()}");
-                            ref.read(isLoadingProvider.notifier).state = false;
                             Fluttertoast.showToast(msg: error.toString());
+                          } finally{
+                            ref.read(isLoadingProvider.notifier).state = false;
+                            scrollListToEnd();
                           }
                         }else{
                           Fluttertoast.showToast(msg: "Please type something.");
@@ -207,4 +223,13 @@ class ChatScreenState extends ConsumerState<ChatScreen> {
       ),
     );
   }
+
+  void scrollListToEnd(){
+    _chatListScrollController.animateTo(
+      _chatListScrollController.position.maxScrollExtent, 
+      duration: const Duration(milliseconds: 300), 
+      curve: Curves.bounceOut
+    );
+  }
 }
+

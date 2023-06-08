@@ -22,7 +22,7 @@ class ChatWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image.asset(
-                  chatIndex == 0 ? AssetsManager.avatarAstronaut : AssetsManager.botImage,
+                  chatIndex == 0 ? AssetsManager.botImage : AssetsManager.avatarAstronaut,
                   width: 32,
                   height: 32,
                 ),
@@ -36,6 +36,7 @@ class ChatWidget extends StatelessWidget {
                     child: AnimatedTextKit(
                       repeatForever: false,
                       isRepeatingAnimation: false,
+                      displayFullTextOnTap: true,
                       totalRepeatCount: 1,
                       animatedTexts: [
                         TypewriterAnimatedText(msg, speed: const Duration(milliseconds: 20), cursor: '█'),
